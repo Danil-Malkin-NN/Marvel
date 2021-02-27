@@ -11,7 +11,6 @@ public class Comics {
     private String name;
 
     @ManyToMany
-//    @JoinColumn(name = "Character", referencedColumnName = "name")
     private Set< Character > characterSet = new HashSet<>();
 
     public String getName() {

@@ -1,5 +1,7 @@
 package develop.Marvel.controller;
 
+import develop.Marvel.dto.CharacterDto;
+import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;
 import develop.Marvel.entities.Comics;
 import develop.Marvel.service.ComicsService;
@@ -17,18 +19,18 @@ public class ComicsController {
     ComicsService comicsService;
 
     @GetMapping()
-    public List< Comics > getComics(){
-        return comicsService.getComicsList();
+    public List< ComicsDto > getComics(){
+        return comicsService.getComicsDtoList();
     }
 
     @GetMapping("/{comicId}")
-    public Comics getComics(@PathVariable("comicId") String name){
-        return comicsService.getComicsByName(name);
+    public ComicsDto getComics(@PathVariable("comicId") String name){
+        return comicsService.getComicsDtoByName(name);
     }
 
     @GetMapping("/{comicId}/characters")
-    public Set< Character > getComicsId(@PathVariable("comicId") String name){
-        return comicsService.getComicsCharacters(name);
+    public Set< CharacterDto > getComicsId(@PathVariable("comicId") String name){
+        return comicsService.getComicsCharactersDto(name);
     }
 
     @PostMapping
