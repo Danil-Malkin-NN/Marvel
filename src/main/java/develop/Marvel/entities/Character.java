@@ -16,6 +16,16 @@ public class Character {
     @ManyToMany
     private Set< Comics > comicsSet = new HashSet<>();
 
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public void addComics(Comics comics) {
         comicsSet.add(comics);
     }
