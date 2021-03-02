@@ -10,15 +10,11 @@ import develop.Marvel.repository.CharactersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -32,6 +28,9 @@ public class CharactersService {
 
     @Value("${upload.path}")
     String uploadPath;
+
+    @Value("${unknown}")
+    String UNKNOWN;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -62,6 +61,8 @@ public class CharactersService {
         try {
             getCharacterByName(character.getName());
         } catch (NoElementException e) {
+            if(character.getImage() == null || character.getImage().isEmpty())
+                character.setImage(UNKNOWN);
             saveCharacter(character);
         }
     }

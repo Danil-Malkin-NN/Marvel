@@ -32,12 +32,14 @@ public class CharactersController {
         CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
         model.put("name", characterDtoImage.getName());
         model.put("message.filename", characterDtoImage.getImage());
-        return "characters";
+        model.put("description", characterDtoImage.getDescription());
+        return "character";
     }
 
     @PostMapping()
-    public void addCharacter(@RequestBody Character character) {
+    public String addCharacter(@RequestBody Character character) {
         charactersService.addCharacter(character);
+        return "successfully";
     }
 
     @PostMapping("/{characterId}/image")

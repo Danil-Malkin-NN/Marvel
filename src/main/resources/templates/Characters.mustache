@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html;" charset="UTF-8"/>
-    <title>Characters</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
 <div>
-    <p>Hello, {{name}}</p>
+    <div class="card">
+        <img src="/img/{{message.filename}}" alt="Avatar" height="500" , width="400">
+        <div class="container">
+            <h4><b>{{name}}</b></h4>
+            <p>{{description}}</p>
+        </div>
+    </div>
 
-    <img src="/img/{{message.filename}}">
+    <div class="card">
+        <img src="/img/{{message.filename}}" alt="Avatar" height="500" , width="400">
+        <div class="container">
+            <h4><b>{{name}}</b></h4>
+            <p>{{description}}</p>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

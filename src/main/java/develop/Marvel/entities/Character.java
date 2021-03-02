@@ -1,6 +1,5 @@
 package develop.Marvel.entities;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -10,15 +9,16 @@ import java.util.Set;
 @Entity
 public class Character {
 
+
     @Id
     private String name;
 
     @ManyToMany
     private Set< Comics > comicsSet = new HashSet<>();
 
-    private String image;
+    private String image ;
 
-    private String description;
+    private String description = "";
 
     public String getDescription() {
         return description;
