@@ -31,7 +31,7 @@ public class CharactersController {
     public String getCharacters(@PathVariable("characterId") String name, ModelMap model) {
         CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
         model.put("name", characterDtoImage.getName());
-//        model.put("message.filename", characterDtoImage.getImage());
+        model.put("message.filename", characterDtoImage.getImage());
         return "characters";
     }
 
