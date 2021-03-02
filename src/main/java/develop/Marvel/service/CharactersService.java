@@ -1,6 +1,7 @@
 package develop.Marvel.service;
 
 import develop.Marvel.dto.CharacterDto;
+import develop.Marvel.dto.CharacterDtoImage;
 import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;
 import develop.Marvel.entities.Comics;
@@ -8,12 +9,17 @@ import develop.Marvel.exeptions.NoElementException;
 import develop.Marvel.repository.CharactersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 public class CharactersService {
@@ -23,6 +29,9 @@ public class CharactersService {
 
     @Autowired
     ComicsService comicsService;
+
+    @Value("${upload.path}")
+    String uploadPath;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -45,8 +54,8 @@ public class CharactersService {
                 () -> new NoElementException(String.format("Item with name %s not found", name)));
     }
 
-    public CharacterDto getCharacterDtoByName(String name) {
-        return modelMapper.map(getCharacterByName(name), CharacterDto.class);
+    public CharacterDtoImage getCharacterDtoImageByName(String name) {
+        return modelMapper.map(getCharacterByName(name), CharacterDtoImage.class);
     }
 
     public void addCharacter(Character character) {
@@ -62,9 +71,9 @@ public class CharactersService {
     }
 
     public Set< ComicsDto > getCharacterComics(String name) {
-        Set<Comics> comics = getCharacterByName(name).getComicsSet();
-        Set<ComicsDto> comicsDto = new HashSet<>();
-        for(Comics c : comics){
+        Set< Comics > comics = getCharacterByName(name).getComicsSet();
+        Set< ComicsDto > comicsDto = new HashSet<>();
+        for (Comics c : comics) {
             comicsDto.add(modelMapper.map(c, ComicsDto.class));
         }
         return comicsDto;
@@ -78,5 +87,24 @@ public class CharactersService {
         saveCharacter(character);
         comicsService.saveComics(comics);
 
+    }
+
+    public void addImage(String name, MultipartFile file) throws IOException {
+        Character character = getCharacterByName(name);
+
+        if (file != null) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + resultFilename));
+            character.setImage(resultFilename);
+            saveCharacter(character);
+        }
     }
 }

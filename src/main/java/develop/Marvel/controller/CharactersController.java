@@ -1,22 +1,21 @@
 package develop.Marvel.controller;
 
 import develop.Marvel.dto.CharacterDto;
+import develop.Marvel.dto.CharacterDtoImage;
 import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;
-import develop.Marvel.entities.Comics;
 import develop.Marvel.service.CharactersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("v1/public/characters")
 public class CharactersController {
 
@@ -29,8 +28,11 @@ public class CharactersController {
     }
 
     @GetMapping("/{characterId}")
-    public CharacterDto getCharacters(@PathVariable("characterId") String name) {
-        return charactersService.getCharacterDtoByName(name);
+    public String getCharacters(@PathVariable("characterId") String name, ModelMap model) {
+        CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
+        model.put("name", characterDtoImage.getName());
+//        model.put("message.filename", characterDtoImage.getImage());
+        return "characters";
     }
 
     @PostMapping()
@@ -38,26 +40,11 @@ public class CharactersController {
         charactersService.addCharacter(character);
     }
 
-    @Value("${upload.path}")
-    String uploadPath;
-
-    @PostMapping("/file")
-    public void addImage(@RequestParam("image") MultipartFile file) throws IOException {
-        System.out.println(file.getOriginalFilename());
-        if(file != null){
-            File uploadDir = new File(uploadPath);
-
-            if(!uploadDir.exists()){
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-        }
-
+    @PostMapping("/{characterId}/image")
+    public String addImage(@PathVariable("characterId") String name,
+                         @RequestParam("image") MultipartFile file) throws IOException {
+        charactersService.addImage(name, file);
+        return "successfully";
     }
 
     @GetMapping("/{characterId}/comics")
