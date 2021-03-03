@@ -1,6 +1,5 @@
 package develop.Marvel.service;
 
-import develop.Marvel.dto.CharacterDto;
 import develop.Marvel.dto.CharacterDtoImage;
 import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;
@@ -10,15 +9,14 @@ import develop.Marvel.repository.CharactersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -33,20 +31,24 @@ public class CharactersService {
     @Value("${upload.path}")
     String uploadPath;
 
+    @Value("${unknown}")
+    String UNKNOWN;
+
     ModelMapper modelMapper = new ModelMapper();
 
-    public List< CharacterDto > getDtoList() {
-        List< CharacterDto > abstractDtos = new ArrayList<>();
-        List< Character > characters = getCharacterList();
-
-        for (Character c : characters) {
-            abstractDtos.add(modelMapper.map(c, CharacterDto.class));
+    public Page< CharacterDtoImage > getDtoList(Pageable pageable) {
+        Page< Character > characterPage = getCharacterList(pageable);
+        List< Character > characterList = characterPage.toList();
+        List<CharacterDtoImage> characterDtoImages = new ArrayList<>();
+        for (Character c : characterList) {
+            characterDtoImages.add(modelMapper.map(c, CharacterDtoImage.class));
         }
-        return abstractDtos;
+
+        return new PageImpl<CharacterDtoImage>(characterDtoImages, characterPage.getPageable(), characterPage.getTotalElements());
     }
 
-    public List< Character > getCharacterList() {
-        return charactersRepository.findAll();
+    public Page< Character > getCharacterList(Pageable pageable) {
+        return charactersRepository.findAll(pageable);
     }
 
     public Character getCharacterByName(String name) {
@@ -62,6 +64,8 @@ public class CharactersService {
         try {
             getCharacterByName(character.getName());
         } catch (NoElementException e) {
+            if(character.getImage() == null || character.getImage().isEmpty())
+                character.setImage(UNKNOWN);
             saveCharacter(character);
         }
     }
@@ -106,5 +110,17 @@ public class CharactersService {
             character.setImage(resultFilename);
             saveCharacter(character);
         }
+    }
+
+    public Page< CharacterDtoImage> getDtoListByTag(Pageable pageable, String filter) {
+        Page< Character > characterPage = charactersRepository.findByTag(filter, pageable);
+        List< Character > characterList = characterPage.toList();
+        List<CharacterDtoImage> characterDtoImages = new ArrayList<>();
+        for (Character c : characterList) {
+            characterDtoImages.add(modelMapper.map(c, CharacterDtoImage.class));
+        }
+
+        return new PageImpl<CharacterDtoImage>(characterDtoImages, characterPage.getPageable(), characterPage.getTotalElements());
+
     }
 }
