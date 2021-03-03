@@ -73,4 +73,14 @@ public class Character {
     public Character() {
     }
 
+    public Character(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Character(String name, String tag, String description) {
+        this.name = name;
+        this.tag = tag;
+        this.description = description;
+    }
 }

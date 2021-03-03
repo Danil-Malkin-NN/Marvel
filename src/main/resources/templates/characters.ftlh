@@ -3,6 +3,7 @@
 
 
 <@p.pager url page/>
+ <span><a href="/v1/public/characters/add">Add</a></span>
 <@c.page>
 <div class="card-columns">
    <#list page.content as character>
