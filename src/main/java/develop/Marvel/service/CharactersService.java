@@ -112,4 +112,16 @@ public class CharactersService {
             saveCharacter(character);
         }
     }
+
+    public Page< CharacterDtoImage> getDtoListByTag(Pageable pageable, String filter) {
+        Page< Character > characterPage = charactersRepository.findByTag(filter, pageable);
+        List< Character > characterList = characterPage.toList();
+        List<CharacterDtoImage> characterDtoImages = new ArrayList<>();
+        for (Character c : characterList) {
+            characterDtoImages.add(modelMapper.map(c, CharacterDtoImage.class));
+        }
+
+        return new PageImpl<CharacterDtoImage>(characterDtoImages, characterPage.getPageable(), characterPage.getTotalElements());
+
+    }
 }

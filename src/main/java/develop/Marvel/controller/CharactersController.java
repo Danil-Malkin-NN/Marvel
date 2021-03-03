@@ -30,10 +30,15 @@ public class CharactersController {
     CharactersService charactersService;
 
     @GetMapping()
-    public String getCharactersList(Model model, @PageableDefault(sort = {"name"}, direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<CharacterDtoImage> page =  charactersService.getDtoList(pageable);
-
-
+    public String getCharactersList(Model model,
+                                    @PageableDefault(sort = {"name"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                    @RequestParam(value = "filter ",required = false)String filter) {
+        Page<CharacterDtoImage> page;
+        if(filter == null){
+             page =  charactersService.getDtoList(pageable);
+        }else {
+            page = charactersService.getDtoListByTag(pageable, filter);
+        }
 
         model.addAttribute("url", "/v1/public/characters");
         model.addAttribute("page", page);
