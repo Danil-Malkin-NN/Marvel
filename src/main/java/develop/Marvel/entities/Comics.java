@@ -12,10 +12,34 @@ public class Comics {
 
     private String image;
 
-    private String description;
+    private String description = "";
+
+    private String tag = "default";
 
     @ManyToMany
     private Set< Character > characterSet = new HashSet<>();
+
+    public Comics(String name, String tag, String description) {
+        this.name = name;
+        this.description = description;
+        this.tag = tag;
+    }
+
+    public Comics(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Comics() {
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public String getImage() {
         return image;

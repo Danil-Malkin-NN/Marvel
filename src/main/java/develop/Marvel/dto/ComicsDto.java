@@ -6,7 +6,17 @@ public class ComicsDto {
 
     String image;
 
+    String tag;
+
     String description;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public String getImage() {
         return image;

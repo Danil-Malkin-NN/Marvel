@@ -3,7 +3,8 @@
 
 
 <@p.pager url filter page/>
- <span><a href="/v1/public/characters/add">Add</a></span>
+ <span><a href="/v1/public/characters/add">Add character</a></span>
+ <span><a href="/v1/public/comics">Comics</a></span>
 <@c.page>
 
     <div class="form-row">
@@ -20,9 +21,10 @@
             <div class="card">
                <img src="/img/${character.image}" height="300", width="200">
                <div class="container">
-                   <h4 ><b><a href="/v1/public/characters/${character.name}/comics">${character.name}</a></b></h4>
+                   <h4 ><b><a href="/v1/public/characters/${character.name}">${character.name}</a></b></h4>
                    <h3><b>${character.tag}</b></h3>
                    <p class="card-text">${character.description}</p>
+                   <span><a href="/v1/public/characters/${character.name}/comics">Comics with this hero</a></span>
                </div>
             </div>
         <#else>

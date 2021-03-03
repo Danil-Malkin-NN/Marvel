@@ -18,7 +18,7 @@ public class Character {
 
     private String tag = "default";
 
-    private String image ;
+    private String image;
 
     private String description = "";
 

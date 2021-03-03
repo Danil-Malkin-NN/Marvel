@@ -45,11 +45,11 @@ public class CharactersController {
     }
 
     @GetMapping("/{characterId}")
-    public String getCharacters(@PathVariable("characterId") String name, Map< String, Object > model) {
+    public String getCharacters(@PathVariable("characterId") String name, Model model) {
         CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
-        model.put("name", characterDtoImage.getName());
-        model.put("filename", characterDtoImage.getImage());
-        model.put("description", characterDtoImage.getDescription());
+        model.addAttribute("name", characterDtoImage.getName());
+        model.addAttribute("filename", characterDtoImage.getImage());
+        model.addAttribute("description", characterDtoImage.getDescription());
         return "character";
     }
 
@@ -74,30 +74,28 @@ public class CharactersController {
         return "successfully";
     }
 
-//    @PostMapping("/{characterId}/image")
-//    public String addImage(@PathVariable("characterId") String name,
-//                           @RequestParam("image") MultipartFile file) throws IOException {
-//        charactersService.addImage(name, file);
-//        return "successfully";
-//    }
-
     @GetMapping("/{characterId}/comics")
     public String getCharacterComics(@PathVariable("characterId") String name, Model model) {
         Set<ComicsDto> set = charactersService.getCharacterComics(name);
 
         model.addAttribute("page", set);
-        return "comics";
+        return "comicDto";
     }
 
-    @PostMapping("/{characterId}")
-    public String addCharacter(@PathVariable("characterId") String name, @RequestBody String nameComics) {
-        charactersService.addComicsInCharacter(name, nameComics);
+    @PostMapping("/addCharacterInComics")
+    public String addCharacter(@RequestParam String name, @RequestParam String comics) {
+        charactersService.addComicsInCharacter(name, comics);
         return "successfully";
     }
 
     @GetMapping("/add")
     public String getAddPage() {
-        return "addPage";
+        return "addCharacter";
+    }
+
+    @GetMapping("/addComic")
+    public String addCharacter(){
+        return "addCharacterInComic";
     }
 
 }
