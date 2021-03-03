@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -53,13 +55,13 @@ public class CharactersController {
 
     @PostMapping()
     public String addCharacter(@RequestParam String name,
-                               @RequestParam(defaultValue = "История этого героя не известна миру.") String description,
+                               @RequestParam(required = false, defaultValue = "История этого героя не известна миру.") String description,
                                @RequestParam(value = "tag", required = false) String tag,
                                @RequestParam(value = "file", required = false) MultipartFile multipartFile) throws
                                                                                                             IOException {
         Character character;
         if (tag != null) {
-            character = new Character(name, tag,description);
+            character = new Character(name, tag, description);
         } else {
             character = new Character(name, description);
         }
@@ -72,26 +74,29 @@ public class CharactersController {
         return "successfully";
     }
 
-    @PostMapping("/{characterId}/image")
-    public String addImage(@PathVariable("characterId") String name,
-                           @RequestParam("image") MultipartFile file) throws IOException {
-        charactersService.addImage(name, file);
-        return "successfully";
-    }
+//    @PostMapping("/{characterId}/image")
+//    public String addImage(@PathVariable("characterId") String name,
+//                           @RequestParam("image") MultipartFile file) throws IOException {
+//        charactersService.addImage(name, file);
+//        return "successfully";
+//    }
 
     @GetMapping("/{characterId}/comics")
-    public Set< ComicsDto > getCharacterComics(@PathVariable("characterId") String name) {
-        return charactersService.getCharacterComics(name);
+    public String getCharacterComics(@PathVariable("characterId") String name, Model model) {
+        Set<ComicsDto> set = charactersService.getCharacterComics(name);
+
+        model.addAttribute("page", set);
+        return "comics";
     }
 
     @PostMapping("/{characterId}")
-    public void addCharacter(@PathVariable("characterId") String name, @RequestBody String nameComics) {
+    public String addCharacter(@PathVariable("characterId") String name, @RequestBody String nameComics) {
         charactersService.addComicsInCharacter(name, nameComics);
+        return "successfully";
     }
 
     @GetMapping("/add")
     public String getAddPage() {
-
         return "addPage";
     }
 

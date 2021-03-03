@@ -9,7 +9,7 @@
      </#if>
 
     <div class="container">
-        <h4><b>${name}</b></h4>
+        <h4 href="/v1/public/characters/${comics.name}/comics}"><b>${name}</b></h4>
         <p>${description}</p>
     </div>
 </div>
