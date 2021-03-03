@@ -10,6 +10,9 @@ import develop.Marvel.repository.CharactersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,18 +37,19 @@ public class CharactersService {
 
     ModelMapper modelMapper = new ModelMapper();
 
-    public List< CharacterDto > getDtoList() {
-        List< CharacterDto > abstractDtos = new ArrayList<>();
-        List< Character > characters = getCharacterList();
-
-        for (Character c : characters) {
-            abstractDtos.add(modelMapper.map(c, CharacterDto.class));
+    public Page< CharacterDtoImage > getDtoList(Pageable pageable) {
+        Page< Character > characterPage = getCharacterList(pageable);
+        List< Character > characterList = characterPage.toList();
+        List<CharacterDtoImage> characterDtoImages = new ArrayList<>();
+        for (Character c : characterList) {
+            characterDtoImages.add(modelMapper.map(c, CharacterDtoImage.class));
         }
-        return abstractDtos;
+
+        return new PageImpl<CharacterDtoImage>(characterDtoImages, characterPage.getPageable(), characterPage.getTotalElements());
     }
 
-    public List< Character > getCharacterList() {
-        return charactersRepository.findAll();
+    public Page< Character > getCharacterList(Pageable pageable) {
+        return charactersRepository.findAll(pageable);
     }
 
     public Character getCharacterByName(String name) {

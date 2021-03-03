@@ -16,9 +16,19 @@ public class Character {
     @ManyToMany
     private Set< Comics > comicsSet = new HashSet<>();
 
+    private String tag = "default";
+
     private String image ;
 
     private String description = "";
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public String getDescription() {
         return description;

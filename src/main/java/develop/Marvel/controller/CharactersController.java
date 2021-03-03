@@ -6,13 +6,20 @@ import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;
 import develop.Marvel.service.CharactersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -23,15 +30,22 @@ public class CharactersController {
     CharactersService charactersService;
 
     @GetMapping()
-    public List< CharacterDto > getCharactersList() {
-        return charactersService.getDtoList();
+    public String getCharactersList(Model model, @PageableDefault(sort = {"name"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<CharacterDtoImage> page =  charactersService.getDtoList(pageable);
+
+
+
+        model.addAttribute("url", "/v1/public/characters");
+        model.addAttribute("page", page);
+        System.out.println("Total elements " + page.getTotalElements() + " Page total " + page.getTotalPages() + " Page size" + page.getSize());
+        return "characters";
     }
 
     @GetMapping("/{characterId}")
-    public String getCharacters(@PathVariable("characterId") String name, ModelMap model) {
+    public String getCharacters(@PathVariable("characterId") String name, Map<String, Object> model) {
         CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
         model.put("name", characterDtoImage.getName());
-        model.put("message.filename", characterDtoImage.getImage());
+        model.put("filename", characterDtoImage.getImage());
         model.put("description", characterDtoImage.getDescription());
         return "character";
     }

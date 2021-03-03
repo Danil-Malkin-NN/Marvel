@@ -1,7 +1,5 @@
 package develop.Marvel.dto;
 
-import java.io.File;
-
 public class CharacterDtoImage {
 
     String name;
@@ -32,5 +30,14 @@ public class CharacterDtoImage {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public CharacterDtoImage(String name, String image, String description) {
+        this.name = name;
+        this.image = image;
+        this.description = description;
+    }
+
+    public CharacterDtoImage() {
     }
 }
