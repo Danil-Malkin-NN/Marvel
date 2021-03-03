@@ -6,7 +6,17 @@ public class CharacterDtoImage {
 
     String image;
 
+    String tag;
+
     String description;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public String getDescription() {
         return description;

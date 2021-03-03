@@ -1,6 +1,5 @@
 package develop.Marvel.service;
 
-import develop.Marvel.dto.CharacterDto;
 import develop.Marvel.dto.CharacterDtoImage;
 import develop.Marvel.dto.ComicsDto;
 import develop.Marvel.entities.Character;

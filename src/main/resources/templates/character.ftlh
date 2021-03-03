@@ -1,6 +1,7 @@
 <#import "parts/common.ftlh" as c>
 
 <@c.page>
+<span><a href="/v1/public/characters">Characters</a></span>
 <div>
 
      <#if filename??>

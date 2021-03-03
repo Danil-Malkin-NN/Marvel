@@ -28,14 +28,15 @@ public class CharactersController {
     @GetMapping()
     public String getCharactersList(Model model,
                                     @PageableDefault(sort = { "name" }, direction = Sort.Direction.DESC) Pageable pageable,
-                                    @RequestParam(value = "filter ", required = false) String filter) {
+                                    @RequestParam(value = "filter", required = false, defaultValue = "") String filter) {
         Page< CharacterDtoImage > page;
-        if (filter == null) {
-            page = charactersService.getDtoList(pageable);
-        } else {
+        if (filter != null && !filter.isEmpty()) {
             page = charactersService.getDtoListByTag(pageable, filter);
+        } else {
+            page = charactersService.getDtoList(pageable);
         }
 
+        model.addAttribute("filter", filter);
         model.addAttribute("url", "/v1/public/characters");
         model.addAttribute("page", page);
         return "characters";
