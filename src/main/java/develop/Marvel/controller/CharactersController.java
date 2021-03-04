@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +43,7 @@ public class CharactersController {
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public void addCharacter(@RequestParam String name,
                                @RequestParam(required = false, defaultValue = "История этого героя не известна миру.") String description,
                                @RequestParam(value = "tag", required = false) String tag,
@@ -67,6 +69,7 @@ public class CharactersController {
     }
 
     @PostMapping("/addCharacterInComics")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addCharacter(@RequestParam String name, @RequestParam String comics) {
         charactersService.addComicsInCharacter(name, comics);
     }
