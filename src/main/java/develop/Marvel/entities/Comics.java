@@ -17,6 +17,9 @@ public class Comics {
     private String tag = "default";
 
     @ManyToMany
+    @JoinTable(name="characters_comics",
+            joinColumns=@JoinColumn(name="comics_name"),
+            inverseJoinColumns=@JoinColumn(name="characters_name"))
     private Set< Character > characterSet = new HashSet<>();
 
     public Comics(String name, String tag, String description) {
