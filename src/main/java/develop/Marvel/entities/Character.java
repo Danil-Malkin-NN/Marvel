@@ -1,8 +1,6 @@
 package develop.Marvel.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +12,9 @@ public class Character {
     private String name;
 
     @ManyToMany
+    @JoinTable(name="characters_comics",
+            joinColumns=@JoinColumn(name="characters_name"),
+            inverseJoinColumns=@JoinColumn(name="comics_name"))
     private Set< Comics > comicsSet = new HashSet<>();
 
     private String tag = "default";
