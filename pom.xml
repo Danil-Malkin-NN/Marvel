@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>develop</groupId>
-    <artifactId>Marvel</artifactId>
+    <artifactId>marvel</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Marvel</name>
+    <name>marvel</name>
     <description>Test task from STM</description>
     <properties>
         <java.version>11</java.version>
