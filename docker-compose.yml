@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: 'marvel1:latest'
+    image: 'marvel2:latest'
     build:
       context: ""
     container_name: app
@@ -15,7 +15,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-
+    volumes:
+      - ./src/image:/opt/app/image
 
   db:
     container_name: sample_db
