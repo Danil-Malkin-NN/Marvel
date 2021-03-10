@@ -35,18 +35,18 @@ public class CharactersController {
             page = charactersService.getDtoList(pageable);
         }
 
-        model.addAttribute("filter", filter);
-        model.addAttribute("url", "/v1/public/characters");
-        model.addAttribute("page", page);
+        model.addAttribute("filter", filter)
+                .addAttribute("url", "/v1/public/characters")
+                .addAttribute("page", page);
         return "characters";
     }
 
     @GetMapping("/{characterId}")
     public String getCharacters(@PathVariable("characterId") String name, Model model) {
         CharacterDtoImage characterDtoImage = charactersService.getCharacterDtoImageByName(name);
-        model.addAttribute("name", characterDtoImage.getName());
-        model.addAttribute("filename", characterDtoImage.getImage());
-        model.addAttribute("description", characterDtoImage.getDescription());
+        model.addAttribute("name", characterDtoImage.getName())
+                .addAttribute("filename", characterDtoImage.getImage())
+                .addAttribute("description", characterDtoImage.getDescription());
         return "character";
     }
 
@@ -73,7 +73,7 @@ public class CharactersController {
 
     @GetMapping("/{characterId}/comics")
     public String getCharacterComics(@PathVariable("characterId") String name, Model model) {
-        Set<ComicsDto> set = charactersService.getCharacterComics(name);
+        Set< ComicsDto > set = charactersService.getCharacterComics(name);
 
         model.addAttribute("page", set);
         return "comicDto";
@@ -91,7 +91,7 @@ public class CharactersController {
     }
 
     @GetMapping("/addComic")
-    public String addCharacter(){
+    public String addCharacter() {
         return "addCharacterInComic";
     }
 

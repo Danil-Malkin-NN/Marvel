@@ -1,9 +1,7 @@
 package develop.Marvel.controller;
 
-import develop.Marvel.dto.CharacterDto;
 import develop.Marvel.dto.CharacterDtoImage;
 import develop.Marvel.dto.ComicsDto;
-import develop.Marvel.entities.Character;
 import develop.Marvel.entities.Comics;
 import develop.Marvel.service.ComicsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +26,32 @@ public class ComicsController {
 
     @GetMapping()
     public String getComics(@PageableDefault(sort = { "name" }, direction = Sort.Direction.DESC) Pageable pageable,
-                                       @RequestParam(value = "filter", required = false, defaultValue = "") String filter, Model model){
+                            @RequestParam(value = "filter", required = false, defaultValue = "") String filter, Model model) {
         Page< ComicsDto > page;
 
         if (filter != null && !filter.isEmpty()) {
             page = comicsService.getDtoListByTag(pageable, filter);
-        }else {
+        } else {
             page = comicsService.getDtoList(pageable);
         }
-        model.addAttribute("filter", filter);
-        model.addAttribute("url", "/v1/public/comics");
-        model.addAttribute("page", page);
+        model.addAttribute("filter", filter)
+                .addAttribute("url", "/v1/public/comics")
+                .addAttribute("page", page);
         return "comics";
     }
 
     @GetMapping("/{comicId}")
-    public String getComic(@PathVariable("comicId") String name, Model model){
+    public String getComic(@PathVariable("comicId") String name, Model model) {
         ComicsDto comicsDto = comicsService.getComicsDtoByName(name);
-        model.addAttribute("name", comicsDto.getName());
-        model.addAttribute("filename", comicsDto.getImage());
-        model.addAttribute("description", comicsDto.getDescription());
+        model.addAttribute("name", comicsDto.getName())
+                .addAttribute("filename", comicsDto.getImage())
+                .addAttribute("description", comicsDto.getDescription());
         return "comic";
     }
 
     @GetMapping("/{comicId}/characters")
-    public String getComicsId(@PathVariable("comicId") String name, Model model){
-        Set<CharacterDtoImage> characterDtoImage =comicsService.getComicsCharactersDto(name);
+    public String getComicsId(@PathVariable("comicId") String name, Model model) {
+        Set< CharacterDtoImage > characterDtoImage = comicsService.getComicsCharactersDto(name);
 
         model.addAttribute("page", characterDtoImage);
         return "charactersDto";
@@ -79,12 +77,12 @@ public class ComicsController {
     }
 
     @GetMapping("/add")
-    public String addComics(){
+    public String addComics() {
         return "addComic";
     }
 
     @GetMapping("/addComic")
-    public String addCharacter(){
+    public String addCharacter() {
         return "addCharacterInComic";
     }
 }
